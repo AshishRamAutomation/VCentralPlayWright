@@ -127,7 +127,7 @@ class CustomShareableReporter implements Reporter {
     </style>
 </head>
 <body>
-    <h1>Playwright Execution Report</h1>
+    <h1>VCentral Playwright Execution Report</h1>
     <div class="summary-card ${String(result?.status || 'failed').toLowerCase()}">Overall Suite Run Status: ${overallStatus}</div>
 
     <div>
