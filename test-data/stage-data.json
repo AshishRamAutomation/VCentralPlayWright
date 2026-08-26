@@ -1,0 +1,11 @@
+{
+  "baseUrl": "https://yashtech-tst1.outsystemsenterprise.com/VCentral_TH/internaloslogin",
+  "validUser": {
+    "username": "1010978",
+    "password": "1010978"
+  },
+  "invalidUser": {
+    "username": "invalid_user",
+    "password": "wrong_password"
+  }
+}
