@@ -18,33 +18,48 @@ test.describe('Vcentral Portal - Create Project Tests', () => {
     dashboardPage = new DashboardPage(page);
     projectCreationPage = new ProjectCreationPage(page);
     
-    await loginPage.navigate();
-    await loginPage.login(TestData.validUser.username, TestData.validUser.password);
-    await dashboardPage.verifyDashboardLoaded();
+    // Grouping the prerequisite setup steps for cleaner reports
+    await test.step('Navigate and Login to VCentral Portal', async () => {
+      await loginPage.navigate();
+      await loginPage.login(TestData.validUser.username, TestData.validUser.password);
+      await dashboardPage.verifyDashboardLoaded();
+    });
   });
 
   test('Create Project', async () => {
     const dynamicProjectName = `${rowData.ProjectNamePrefix}_${Date.now()}`;
 
-    // Step 1: Safely expand "Projects" and click "My Projects" sub-menu
-    await projectCreationPage.navigateToCreateProject();
-//step 2: create project button click
-await projectCreationPage.clickCreateProjectButton();
-    // Step 2: Proceed with form initialization using Excel row records
-    await projectCreationPage.fillProjectDetailsFromExcel(
-      rowData.CustomerName, 
-      dynamicProjectName,
-      rowData.ProjectManager,
-      rowData.DeliveryManager,
-      rowData.ProjectCategory,
-      rowData.PrimaryServiceLine,
-      rowData.Alliance  
-    );
+    // Step 1: Expand menus and go to project tracking
+    await test.step('Step 1: Expand "Projects" and click "My Projects" sub-menu', async () => {
+      await projectCreationPage.navigateToCreateProject();
+    });
 
-    // Step 3: Validate OutSystems reactive logic successfully loaded Customer Code & Project ID
-    await projectCreationPage.verifyAutoPopulatedFields();
+    // Step 2: Trigger creation overlay/form
+    await test.step('Step 2: Click the "Create Project" button', async () => {
+      await projectCreationPage.clickCreateProjectButton();
+    });
 
-    // Step 4: Finalize data collection entry pipeline
-    await projectCreationPage.submitForm();
+    // Step 3: Populate field records from excel
+    await test.step('Step 3: Fill project profile configurations from Excel records', async () => {
+      await projectCreationPage.fillProjectDetailsFromExcel(
+        rowData.CustomerName, 
+        dynamicProjectName,
+        rowData.ProjectManager,
+        rowData.DeliveryManager,
+        rowData.ProjectCategory,
+        rowData.PrimaryServiceLine,
+        rowData.Alliance  
+      );
+    });
+
+    // Step 4: Validate reactive values
+    await test.step('Step 4: Verify all data filled', async () => {
+      await projectCreationPage.verifyAutoPopulatedFields();
+    });
+
+    // Step 5: Post data payloads
+    await test.step('Step 5: Submit form and project should created', async () => {
+      await projectCreationPage.submitForm();
+    });
   });
 });

@@ -63,10 +63,7 @@ export class ProjectCreationPage {
     this.saveBtn = page.locator('button:has-text("Save")').or(page.locator('button[type="submit"]'));
   }
 
-  /**
-   * Universal screenshot engine to capture state changes
-   * Saves screenshots inside a 'screenshots' folder at your project root directory
-   */
+  
   async takeScreenshot(stepName: string) {
     const formattedName = stepName.toLowerCase().replace(/[^a-z0-9]/g, '_');
     await this.page.screenshot({ 
@@ -76,16 +73,15 @@ export class ProjectCreationPage {
   }
 
   async navigateToCreateProject() {
-    await this.projectsMenuSidebar.waitFor({ state: 'visible', timeout: 10000 });
-    await this.projectsMenuSidebar.click({ force: true });
-    
-    await this.myProjectsMenuSidebar.waitFor({ state: 'visible', timeout: 10000 });
-    await this.page.waitForTimeout(500);
-    await this.myProjectsMenuSidebar.click({ force: true });
-    
-    await this.page.waitForLoadState('networkidle');
-    await this.takeScreenshot('navigation_to_projects_dashboard');
-  }
+  await this.projectsMenuSidebar.waitFor({ state: 'visible', timeout: 10000 });
+  await this.projectsMenuSidebar.evaluate((element: HTMLElement) => element.click());
+  await this.myProjectsMenuSidebar.waitFor({ state: 'visible', timeout: 10000 });
+  await this.page.waitForTimeout(500);
+  await this.myProjectsMenuSidebar.evaluate((element: HTMLElement) => element.click());
+  await this.page.waitForLoadState('networkidle');
+  await this.page.screenshot();
+}
+
 
   async clickCreateProjectButton() {
     await this.createProjectButton.waitFor({ state: 'visible', timeout: 10000 });
