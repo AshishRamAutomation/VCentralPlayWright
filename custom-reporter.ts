@@ -1,4 +1,4 @@
-import { Reporter, TestCase, TestResult } from '@playwright/test';
+import type { Reporter, TestCase, TestResult } from '@playwright/test/reporter';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -29,7 +29,7 @@ class CustomShareableReporter implements Reporter {
     }
 
     const stepScreenshots = new Map<string, string>();
-    result.attachments.forEach((attachment, index) => {
+    result.attachments.forEach((attachment: TestResult['attachments'][number], index: number) => {
       if (attachment.name === 'screenshot' && attachment.path && fs.existsSync(attachment.path)) {
         const safeTitle = test.title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
         const fileName = `${safeTitle}_snap_${index}.png`;
